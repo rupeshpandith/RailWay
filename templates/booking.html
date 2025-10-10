@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Book Ticket</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<main class="page page--narrow">
+  <header class="page__header">
+    <h1 class="headline">Passenger details</h1>
+  <a class="link" href="{{ url_for('index') }}" onclick="history.back(); return false;">← Back to results</a>
+  </header>
+
+  {% if error %}
+    <div class="alert alert--error">{{ error }}</div>
+  {% endif %}
+
+  {% if sched %}
+    <section class="card">
+      <h2>{{ sched.train_name }} ({{ sched.train_number }})</h2>
+      <dl class="meta-grid">
+        <div>
+          <dt>Route</dt>
+          <dd>{{ sched.source_name }} → {{ sched.destination_name }}</dd>
+        </div>
+        <div>
+          <dt>Travel date</dt>
+          <dd>{{ sched.travel_date.strftime('%d %b %Y') if sched.travel_date else sched.travel_date }}</dd>
+        </div>
+        <div>
+          <dt>Departure</dt>
+          <dd>{{ sched.departure_time.strftime('%H:%M') if sched.departure_time else sched.departure_time }}</dd>
+        </div>
+        <div>
+          <dt>Arrival</dt>
+          <dd>{{ sched.arrival_time.strftime('%H:%M') if sched.arrival_time else sched.arrival_time }}</dd>
+        </div>
+        <div>
+          <dt>Seats left</dt>
+          <dd>{{ sched.available_seats }}</dd>
+        </div>
+      </dl>
+
+      <form class="form" method="POST">
+        {% if coach_types %}
+        <fieldset class="coach-grid">
+          <legend>Choose your coach</legend>
+          {% for coach in coach_types %}
+          <label class="coach-card">
+            <input type="radio" name="coach_type" value="{{ coach.id }}" {% if selected_coach_id and selected_coach_id|int == coach.id %}checked{% endif %} required>
+            <div class="coach-card__content">
+              <div class="coach-card__header">
+                <span class="coach-code">{{ coach.code }}</span>
+                <h3>{{ coach.name }}</h3>
+              </div>
+              <p class="coach-price">₹{{ coach.fare_display }}</p>
+              {% if coach.description %}
+                <p class="muted">{{ coach.description }}</p>
+              {% endif %}
+            </div>
+          </label>
+          {% endfor %}
+        </fieldset>
+        {% endif %}
+
+        <label class="form__field">
+          <span>Passenger name</span>
+          <input type="text" name="name" minlength="2" placeholder="e.g. Aditi Sharma" value="{{ request.form.get('name', '') }}" required>
+        </label>
+        <label class="form__field">
+          <span>Email (optional)</span>
+          <input type="email" name="email" placeholder="you@example.com" value="{{ request.form.get('email', '') }}">
+        </label>
+        <div class="form__actions">
+          <button type="submit" class="button button--primary">Proceed to payment</button>
+        </div>
+      </form>
+    </section>
+  {% else %}
+    <section class="card empty-state">
+      <h2>Schedule not found</h2>
+      <p>The selected train is no longer available. Return to the <a href="{{ url_for('index') }}">search page</a>.</p>
+    </section>
+  {% endif %}
+</main>
+</body>
+</html>

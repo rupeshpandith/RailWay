@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Train Ticket Booking</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <main class="page page--centered">
+    <header class="page__header">
+      <h1 class="headline">Search Trains</h1>
+      <p class="subheadline">Plan your journey and reserve seats in just a few steps.</p>
+    </header>
+
+    {% if error %}
+      <div class="alert alert--error">{{ error }}</div>
+    {% endif %}
+
+    {% if stations %}
+      <form class="card form form--search" action="{{ url_for('search') }}" method="POST">
+        <div class="form__grid">
+          <label class="form__field">
+            <span>Source</span>
+            <select name="source" required>
+              <option value="" disabled selected>Select source</option>
+              {% for station in stations %}
+                <option value="{{ station.station_id }}">{{ station.station_name }}</option>
+              {% endfor %}
+            </select>
+          </label>
+
+          <label class="form__field">
+            <span>Destination</span>
+            <select name="destination" required>
+              <option value="" disabled selected>Select destination</option>
+              {% for station in stations %}
+                <option value="{{ station.station_id }}">{{ station.station_name }}</option>
+              {% endfor %}
+            </select>
+          </label>
+
+          <label class="form__field">
+            <span>Travel date</span>
+            <input type="date" name="date" required>
+          </label>
+        </div>
+        <div class="form__actions">
+          <button type="submit" class="button button--primary">Search</button>
+        </div>
+      </form>
+    {% else %}
+      <section class="card empty-state">
+        <h2>No stations available</h2>
+        <p>Add station data using <code>init_db.py</code> or via your database to start booking journeys.</p>
+      </section>
+    {% endif %}
+  </main>
+
+  <script src="{{ url_for('static', filename='main.js') }}" defer></script>
+</body>
+</html>

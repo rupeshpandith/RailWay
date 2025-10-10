@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Payment</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<main class="page page--narrow">
+  <header class="page__header">
+    <h1 class="headline">Complete your payment</h1>
+    <p class="subheadline">Booking reference #{{ booking.booking_id if booking else '' }}</p>
+  </header>
+
+  {% if error %}
+    <div class="alert alert--error">{{ error }}</div>
+  {% endif %}
+
+  {% if booking %}
+    <section class="card">
+      <h2>Journey summary</h2>
+      <dl class="meta-grid">
+        <div>
+          <dt>PNR</dt>
+          <dd>{{ booking.pnr }}</dd>
+        </div>
+        <div>
+          <dt>Passenger</dt>
+          <dd>{{ booking.passenger_name }}</dd>
+        </div>
+        <div>
+          <dt>Seat</dt>
+          <dd>{{ booking.seat_number }}</dd>
+        </div>
+        <div>
+          <dt>Coach</dt>
+          <dd>{{ booking.coach_name }} ({{ booking.coach_code }})</dd>
+        </div>
+        <div>
+          <dt>Route</dt>
+          <dd>{{ booking.source_name }} → {{ booking.destination_name }}</dd>
+        </div>
+        <div>
+          <dt>Date</dt>
+          <dd>{{ booking.travel_date.strftime('%d %b %Y') if booking.travel_date else booking.travel_date }}</dd>
+        </div>
+        <div>
+          <dt>Departure</dt>
+          <dd>{{ booking.departure_time.strftime('%H:%M') if booking.departure_time else booking.departure_time }}</dd>
+        </div>
+        <div>
+          <dt>Arrival</dt>
+          <dd>{{ booking.arrival_time.strftime('%H:%M') if booking.arrival_time else booking.arrival_time }}</dd>
+        </div>
+        <div>
+          <dt>Fare</dt>
+          <dd>₹{{ '%.2f'|format(booking.fare_amount) }}</dd>
+        </div>
+      </dl>
+    </section>
+
+    <section class="card">
+      <h2>Pay ₹{{ '%.2f'|format(booking.fare_amount) }}</h2>
+      <p class="muted">Enter any card number ending with an even digit to simulate success.</p>
+      <form class="form" method="POST" action="{{ url_for('pay') }}">
+        <input type="hidden" name="booking_id" value="{{ booking.booking_id }}">
+        <input type="hidden" name="pnr" value="{{ booking.pnr }}">
+        <label class="form__field">
+          <span>Card number</span>
+          <input type="text" name="card" minlength="4" maxlength="19" placeholder="4111 1111 1111 1111" required>
+        </label>
+        <div class="form__actions">
+          <button type="submit" class="button button--primary">Pay ₹{{ '%.2f'|format(booking.fare_amount) }}</button>
+        </div>
+      </form>
+    </section>
+  {% else %}
+    <section class="card empty-state">
+      <h2>Booking not found</h2>
+      <p>The payment link is invalid or has expired. Start again from the <a href="{{ url_for('index') }}">search page</a>.</p>
+    </section>
+  {% endif %}
+</main>
+</body>
+</html>

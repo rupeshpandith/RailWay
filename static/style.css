@@ -1,0 +1,275 @@
+:root {
+  color-scheme: light;
+  font-family: "Inter", "Segoe UI", Helvetica, Arial, sans-serif;
+  --bg: #f4f6fb;
+  --card-bg: #ffffff;
+  --accent: #2e7d32;
+  --accent-hover: #256428;
+  --text: #1a1c1d;
+  --muted: #5f6368;
+  --border: #e0e3eb;
+  --error: #c62828;
+  --secondary: #1565c0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 16px;
+}
+
+.page {
+  width: min(960px, 100%);
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.page--centered {
+  align-items: center;
+}
+
+.page--narrow {
+  width: min(720px, 100%);
+}
+
+.page__header {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.headline {
+  margin: 0;
+  font-size: clamp(2rem, 4vw, 2.5rem);
+  font-weight: 700;
+}
+
+.subheadline {
+  margin: 0;
+  color: var(--muted);
+  font-size: 1rem;
+}
+
+.card {
+  background: var(--card-bg);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 20px 40px rgba(20, 30, 60, 0.08);
+  border: 1px solid var(--border);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.form__grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+.form__field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.form__field input,
+.form__field select {
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  font-size: 1rem;
+  color: var(--text);
+  background: #fff;
+}
+
+.form__field input:focus,
+.form__field select:focus {
+  outline: 2px solid rgba(46, 125, 50, 0.35);
+}
+
+.form__actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border-radius: 999px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform 0.15s ease, background 0.2s ease;
+}
+
+.button--primary {
+  background: var(--accent);
+  color: #fff;
+}
+
+.button--primary:hover {
+  background: var(--accent-hover);
+  transform: translateY(-1px);
+}
+
+.button--secondary {
+  background: var(--secondary);
+  color: #fff;
+  padding: 10px 18px;
+  border-radius: 12px;
+}
+
+.button--secondary:hover {
+  filter: brightness(0.95);
+}
+
+.alert {
+  width: 100%;
+  padding: 16px;
+  border-radius: 12px;
+  font-weight: 600;
+}
+
+.alert--error {
+  background: rgba(198, 40, 40, 0.1);
+  color: var(--error);
+  border: 1px solid rgba(198, 40, 40, 0.35);
+}
+
+.empty-state {
+  text-align: center;
+}
+
+.empty-state h2 {
+  margin-top: 0;
+}
+
+.link {
+  color: var(--secondary);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.table th,
+.table td {
+  padding: 14px 12px;
+  text-align: left;
+}
+
+.table thead {
+  background: rgba(46, 125, 50, 0.08);
+}
+
+.table tbody tr:nth-child(odd) {
+  background: rgba(0, 0, 0, 0.01);
+}
+
+.meta-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 16px;
+  margin: 16px 0;
+}
+
+.meta-grid dt {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+  margin-bottom: 4px;
+}
+
+.meta-grid dd {
+  margin: 0;
+  font-weight: 600;
+}
+
+.ticket__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.ticket__footer {
+  margin-top: 24px;
+  border-top: 1px dashed var(--border);
+  padding-top: 16px;
+}
+
+.muted {
+  color: var(--muted);
+  margin: 0;
+}
+
+.status {
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+.status--confirmed {
+  background: rgba(46, 125, 50, 0.12);
+  color: var(--accent-hover);
+}
+
+.status--failed {
+  background: rgba(198, 40, 40, 0.12);
+  color: var(--error);
+}
+
+@media (max-width: 640px) {
+  body {
+    padding: 24px 12px;
+  }
+
+  .page {
+    gap: 16px;
+  }
+
+  .card {
+    padding: 20px;
+  }
+
+  .form__actions {
+    justify-content: stretch;
+  }
+
+  .button {
+    width: 100%;
+  }
+}

@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ticket</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<main class="page page--narrow">
+  <header class="page__header">
+    <h1 class="headline">Your e-Ticket</h1>
+    <a class="link" href="{{ url_for('index') }}">← Book another journey</a>
+  </header>
+
+  {% if error %}
+    <div class="alert alert--error">{{ error }}</div>
+  {% endif %}
+
+  {% if ticket %}
+    <section class="card ticket">
+      <div class="ticket__header">
+        <div>
+          <h2>PNR {{ ticket.pnr }}</h2>
+          <p class="muted">Issued {{ ticket.issued_at.strftime('%d %b %Y %H:%M') if ticket.issued_at else '' }}</p>
+        </div>
+        <span class="status status--{{ ticket.booking_status|lower }}">{{ ticket.booking_status }}</span>
+      </div>
+
+      <dl class="meta-grid">
+        <div>
+          <dt>Passenger</dt>
+          <dd>{{ ticket.passenger_name }}</dd>
+        </div>
+        <div>
+          <dt>Email</dt>
+          <dd>{{ ticket.email or '—' }}</dd>
+        </div>
+        <div>
+          <dt>Seat</dt>
+          <dd>{{ ticket.seat_number }}</dd>
+        </div>
+        <div>
+          <dt>Coach</dt>
+          <dd>{{ ticket.coach_name }} ({{ ticket.coach_code }})</dd>
+        </div>
+        <div>
+          <dt>Train</dt>
+          <dd>{{ ticket.train_name }} ({{ ticket.train_number }})</dd>
+        </div>
+        <div>
+          <dt>Route</dt>
+          <dd>{{ ticket.source_name }} → {{ ticket.destination_name }}</dd>
+        </div>
+        <div>
+          <dt>Departure</dt>
+          <dd>
+            {{ ticket.travel_date.strftime('%d %b %Y') if ticket.travel_date else '' }}
+            {{ ticket.departure_time.strftime('%H:%M') if ticket.departure_time else '' }}
+          </dd>
+        </div>
+        <div>
+          <dt>Arrival</dt>
+          <dd>{{ ticket.arrival_time.strftime('%H:%M') if ticket.arrival_time else '' }}</dd>
+        </div>
+        <div>
+          <dt>Fare paid</dt>
+          <dd>₹{{ '%.2f'|format(ticket.fare_amount) }}</dd>
+        </div>
+      </dl>
+
+      <footer class="ticket__footer">
+        <p class="muted">Keep this ticket handy for verification at the boarding station.</p>
+      </footer>
+    </section>
+  {% else %}
+    <section class="card empty-state">
+      <h2>Ticket unavailable</h2>
+      <p>We couldn't find this ticket. Double-check the PNR or try searching again.</p>
+    </section>
+  {% endif %}
+</main>
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Available Trains</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<main class="page">
+  <header class="page__header">
+    <h1 class="headline">Available Trains</h1>
+    <p class="subheadline">
+      {% if schedules and schedules[0] %}
+        {{ schedules[0].source_name }} → {{ schedules[0].destination_name }}
+      {% endif %}
+      on {{ search_date.strftime('%d %b %Y') if search_date else 'selected date' }}
+    </p>
+    <a class="link" href="{{ url_for('index') }}">← Modify search</a>
+  </header>
+
+  {% if error %}
+    <div class="alert alert--error">{{ error }}</div>
+  {% endif %}
+
+  {% if schedules %}
+    <section class="card">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Train</th>
+            <th>Number</th>
+            <th>Departure</th>
+            <th>Arrival</th>
+            <th>Seats left</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for s in schedules %}
+            <tr>
+              <td>{{ s.train_name }}</td>
+              <td>{{ s.train_number }}</td>
+              <td>{{ s.departure_time.strftime('%H:%M') if s.departure_time else s.departure_time }}</td>
+              <td>{{ s.arrival_time.strftime('%H:%M') if s.arrival_time else s.arrival_time }}</td>
+              <td>{{ s.available_seats }}</td>
+              <td>
+                <a class="button button--secondary" href="{{ url_for('book', schedule_id=s.schedule_id) }}">Book</a>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </section>
+  {% else %}
+    <section class="card empty-state">
+      <h2>No trains found</h2>
+      <p>Try a different date or route. Make sure sample data is seeded using <code>init_db.py</code>.</p>
+    </section>
+  {% endif %}
+</main>
+</body>
+</html>
