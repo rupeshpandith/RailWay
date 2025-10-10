@@ -1,4 +1,4 @@
-# Railway 2.0 – Train Ticket Booking System
+# Railway – Train Ticket Booking System
 
 A Flask-based web application for searching trains, booking seats, simulating payments, and generating e-tickets.
 
